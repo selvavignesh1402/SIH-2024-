@@ -15,11 +15,19 @@
     "ios": {
       "supportsTablet": true
     },
-    "android": {
+   "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDf-7eFb2Hx1ogdbgRl3m7ULunBuUcmX5U"
+        }
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -31,6 +39,9 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "mapboxToken": "pk.eyJ1IjoidmlnbmVzaDEyMzQ1NjciLCJhIjoiY20wY2tnY2x4MDM0YTJsczhoN2h6bHM5ZyJ9.efhAE5dA01UVW0RbILRxdg"
     }
   }
 }
