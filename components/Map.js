@@ -190,45 +190,56 @@ const Map = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [manualLocation, setManualLocation] = useState(null); 
   const [entryTime, setEntryTime] = useState(null); 
+  const [hasChecked, setHasChecked] = useState(false);
 
   const center = { latitude: 10.926058752319875, longitude: 76.92540367417263 };
 
   useEffect(() => {
+    let subscription;
+
     const requestLocationPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status === 'granted') {
-        getCurrentLocation();
+        subscription = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            timeInterval: 1000, 
+            distanceInterval: 1,
+          },
+          (location) => {
+            if (location && !hasChecked) {
+              const { coords: { latitude, longitude } } = location;
+              setCurrentLocation({ latitude, longitude });
+
+              const isInPolygon = geolib.isPointInPolygon(
+                { latitude, longitude },
+                polygonCoords
+              );
+              console.log('Is the user inside the polygon?', isInPolygon);
+
+              if (isInPolygon && !entryTime) {
+                const currentTime = new Date().toISOString();
+                setEntryTime(currentTime);
+                console.log('Entry time recorded:', currentTime);
+              }
+              setHasChecked(true);
+            }
+          }
+        );
       } else {
         console.log('Location permission denied');
       }
     };
 
-    const getCurrentLocation = async () => {
-      const location = await Location.getCurrentPositionAsync({});
+    requestLocationPermission();
 
-      if (location) {
-        const { coords: { latitude, longitude } } = location;
-        setCurrentLocation({ latitude, longitude });
-
-        const isInPolygon = geolib.isPointInPolygon(
-          { latitude, longitude },
-          polygonCoords
-        );
-        console.log('Is the user inside the polygon?', isInPolygon);
-
-        if (isInPolygon && !entryTime) {
-          const currentTime = new Date().toISOString();
-          setEntryTime(currentTime);
-          console.log('Entry time recorded:', currentTime);
-        }
-      } else {
-        console.log('Unable to retrieve location');
+    return () => {
+      if (subscription) {
+        subscription.remove();
       }
     };
-
-    requestLocationPermission();
-  }, [entryTime]); 
+  }, [entryTime,hasChecked]);
 
   const setTestLocation = () => {
     const testLocation = { latitude: 10.926058752319875, longitude: 76.92540367417263 };
