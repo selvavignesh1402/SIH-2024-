@@ -9,6 +9,7 @@ const RootLayout = () => {
       <Stack>
         <Stack.Screen name="index" />  
         <Stack.Screen name="map" />    
+        <Stack.Screen name="manual" />    
       </Stack>
     </View>
   );

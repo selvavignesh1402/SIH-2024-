@@ -22,7 +22,7 @@
       },
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyDf-7eFb2Hx1ogdbgRl3m7ULunBuUcmX5U"
+          "apiKey": "AIzaSyDHqFQnsOIzSEWk7_jYWND7P-Ul_uxAmJ4"
         }
       },
       "permissions": [
@@ -41,7 +41,9 @@
       "typedRoutes": true
     },
     "extra": {
-      "mapboxToken": "pk.eyJ1IjoidmlnbmVzaDEyMzQ1NjciLCJhIjoiY20wY2tnY2x4MDM0YTJsczhoN2h6bHM5ZyJ9.efhAE5dA01UVW0RbILRxdg"
+      "mapboxToken": "pk.eyJ1IjoidmlnbmVzaDEyMzQ1NjciLCJhIjoiY20wY2tnY2x4MDM0YTJsczhoN2h6bHM5ZyJ9.efhAE5dA01UVW0RbILRxdg",
+      "foursquareApiKey": "fsq3mYZ6ETlORsrHsrqL/+dxKd4oBndLOV7wySamZS/Gaf8=",
+      "openCageApiKey": "b78dd2fbab6c4fdea284e6c8ccf67eda"
     }
   }
 }

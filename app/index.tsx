@@ -12,6 +12,10 @@ const HomeScreen: React.FC = () => {
         title="Go to Map"
         onPress={() => router.push('/map')} 
       />
+      <Button
+        title="ManualCheck"
+        onPress={() => router.push('/manual')} 
+      />
     </View>
   );
 };

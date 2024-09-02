@@ -116,8 +116,9 @@ import { View, StyleSheet, Button, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as geolib from 'geolib';
+import { Accelerometer, Gyroscope, Magnetometer } from 'expo-sensors';
+import ManualCheck from './ManualCheck';
 
-// Updated coordinates from the JSON
 const polygonCoords = [
   { latitude: 10.926485799543615, longitude: 76.92540093858133 },
   { latitude: 10.92648389992211, longitude: 76.92536155700793 },
@@ -186,37 +187,223 @@ const polygonCoords = [
   { latitude: 10.926485799543615, longitude: 76.92540093858133 },
 ];
 
+// const Map = () => {
+//   const [currentLocation, setCurrentLocation] = useState(null);
+//   const [manualLocation, setManualLocation] = useState(null);
+//   const [entryTime, setEntryTime] = useState(null);
+//   const [hasChecked, setHasChecked] = useState(false);
+//   const [accelerometerData, setAccelerometerData] = useState({});
+//   const [gyroscopeData, setGyroscopeData] = useState({});
+//   const [magnetometerData, setMagnetometerData] = useState(null);
+//   const [stepCount, setStepCount] = useState(0);
+//   const [heading, setHeading] = useState(0);
+
+//   const center = { latitude: 11.04860471121232, longitude: 76.98053638312406 };
+
+//   useEffect(() => {
+//     let locationSubscription;
+//     let accelSubscription;
+//     let gyroSubscription;
+//     let magnetometerSubscription;
+
+//     const requestLocationPermission = async () => {
+//       const { status } = await Location.requestForegroundPermissionsAsync();
+
+//       if (status === 'granted') {
+//         locationSubscription = await Location.watchPositionAsync(
+//           {
+//             accuracy: Location.Accuracy.High,
+//             timeInterval: 1000,
+//             distanceInterval: 1,
+//           },
+//           (location) => {
+//             if (location && !hasChecked) {
+//               const { coords: { latitude, longitude } } = location;
+//               setCurrentLocation({ latitude, longitude });
+
+//               const isInPolygon = geolib.isPointInPolygon(
+//                 { latitude, longitude },
+//                 polygonCoords
+//               );
+//               console.log('Is the user inside the polygon?', isInPolygon);
+
+//               if (isInPolygon && !entryTime) {
+//                 const currentTime = new Date().toISOString();
+//                 setEntryTime(currentTime);
+//                 console.log('Entry time recorded:', currentTime);
+//               }
+//               setHasChecked(true);
+//             }
+//           }
+//         );
+//       } else {
+//         console.log('Location permission denied');
+//       }
+//     };
+
+//     const startSensors = () => {
+//       accelSubscription = Accelerometer.addListener((data) => {
+//         setAccelerometerData(data);
+//         calculateStepCount(data);
+//       });
+
+//       gyroSubscription = Gyroscope.addListener((data) => {
+//         setGyroscopeData(data);
+//         updateHeading(data);
+//       });
+
+//       magnetometerSubscription = Magnetometer.addListener((data) => {
+//         setMagnetometerData(data);
+//         // console.log('Magnetometer Data:', data);
+//       });
+
+//       Accelerometer.setUpdateInterval(100); // 100ms
+//       Gyroscope.setUpdateInterval(100); // 100ms
+//       Magnetometer.setUpdateInterval(100); // 100ms
+//     };
+
+//     requestLocationPermission();
+//     startSensors();
+
+//     return () => {
+//       if (locationSubscription) locationSubscription.remove();
+//       if (accelSubscription) accelSubscription.remove();
+//       if (gyroSubscription) gyroSubscription.remove();
+//       if (magnetometerSubscription) magnetometerSubscription.remove();
+//     };
+//   }, [entryTime, hasChecked]);
+
+//   const calculateStepCount = (accelerometerData) => {
+//     const threshold = 1.2; // Adjust this threshold based on testing
+//     if (accelerometerData.z > threshold) {
+//       setStepCount((prevCount) => prevCount + 1);
+//       console.log('Step detected! Total steps:', stepCount + 1);
+//     }
+//   };
+
+//   const updateHeading = (gyroscopeData) => {
+//     const { x, y, z } = gyroscopeData;
+//     const deltaHeading = Math.sqrt(x * x + y * y + z * z); // Change in heading based on angular velocity
+//     setHeading((prevHeading) => prevHeading + deltaHeading);
+//   };
+
+//   const setTestLocation = () => {
+//     const testLocation = { latitude: 10.926058752319875, longitude: 76.92540367417263 };
+//     setManualLocation(testLocation);
+
+//     const isInPolygon = geolib.isPointInPolygon(
+//       testLocation,
+//       polygonCoords
+//     );
+//     console.log('Is the test location inside the polygon?', isInPolygon);
+
+//     if (isInPolygon && !entryTime) {
+//       const testEntryTime = new Date();
+//       setEntryTime(testEntryTime.toISOString());
+//       console.log('Entry time recorded for manual location:', new Date(testEntryTime).toLocaleString());
+//     }
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <MapView
+//         provider={PROVIDER_GOOGLE}
+//         style={styles.map}
+//         mapType="hybrid"
+//         initialRegion={{
+//           latitude: center.latitude,
+//           longitude: center.longitude,
+//           latitudeDelta: 0.015,
+//           longitudeDelta: 0.0121,
+//         }}
+//       >
+//         <Polygon
+//           coordinates={polygonCoords}
+//           strokeColor="#F00"
+//           fillColor="rgba(255,0,0,0.3)"
+//           strokeWidth={1}
+//         />
+//         {currentLocation && (
+//           <Marker
+//             coordinate={currentLocation}
+//             title={"Your Location"}
+//           />
+//         )}
+//         {manualLocation && (
+//           <Marker
+//             coordinate={manualLocation}
+//             title={"Manual Location"}
+//             pinColor="blue"
+//           />
+//         )}
+//       </MapView>
+//       <Button title="Set Test Location" onPress={setTestLocation} />
+//       <Text>Step Count: {stepCount}</Text>
+//       <Text>Heading: {heading}</Text>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'flex-end',
+//   },
+//   map: {
+//     flex: 1,
+//   },
+// });
+
+// export default Map;
+
 const Map = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
-  const [manualLocation, setManualLocation] = useState(null); 
-  const [entryTime, setEntryTime] = useState(null); 
+  const [manualLocation, setManualLocation] = useState(null);
+  const [entryTime, setEntryTime] = useState(null);
   const [hasChecked, setHasChecked] = useState(false);
+  const [accelerometerData, setAccelerometerData] = useState({});
+  const [gyroscopeData, setGyroscopeData] = useState({});
+  const [magnetometerData, setMagnetometerData] = useState({});
+  const [stepCount, setStepCount] = useState(0);
+  const [heading, setHeading] = useState(0);
+  const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
 
-  const center = { latitude: 10.926058752319875, longitude: 76.92540367417263 };
+  const center = { latitude: 10.928549250240643, longitude: 76.92494883585357 };
+  // 10.928549250240643, 76.92494883585357
+  const [region, setRegion] = useState({
+    latitude: 10.928549250240643,
+    longitude: 76.92494883585357,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
 
   useEffect(() => {
-    let subscription;
+    let locationSubscription;
+    let accelSubscription;
+    let gyroSubscription;
+    let magnetometerSubscription;
 
     const requestLocationPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
 
       if (status === 'granted') {
-        subscription = await Location.watchPositionAsync(
+        locationSubscription = await Location.watchPositionAsync(
           {
             accuracy: Location.Accuracy.High,
-            timeInterval: 1000, 
+            timeInterval: 1000,
             distanceInterval: 1,
           },
           (location) => {
             if (location && !hasChecked) {
               const { coords: { latitude, longitude } } = location;
               setCurrentLocation({ latitude, longitude });
+              setCurrentPosition({ latitude, longitude });
 
               const isInPolygon = geolib.isPointInPolygon(
                 { latitude, longitude },
                 polygonCoords
               );
-              console.log('Is the user inside the polygon?', isInPolygon);
+              //console.log('Is the user inside the polygon?', isInPolygon);
 
               if (isInPolygon && !entryTime) {
                 const currentTime = new Date().toISOString();
@@ -232,14 +419,96 @@ const Map = () => {
       }
     };
 
+    const startSensors = () => {
+      Accelerometer.setUpdateInterval(100);
+      Gyroscope.setUpdateInterval(100);
+      Magnetometer.setUpdateInterval(100);
+
+      accelSubscription = Accelerometer.addListener((data) => {
+        setAccelerometerData(data);
+        calculateStepCount(data);
+      });
+
+      gyroSubscription = Gyroscope.addListener((data) => {
+        setGyroscopeData(data);
+        updateHeading(data);
+      });
+
+      magnetometerSubscription = Magnetometer.addListener((data) => {
+        setMagnetometerData(data);
+        calculateHeading(data);
+      });
+    };
+
     requestLocationPermission();
+    startSensors();
+
 
     return () => {
-      if (subscription) {
-        subscription.remove();
-      }
+      if (locationSubscription) locationSubscription.remove();
+      if (accelSubscription) accelSubscription.remove();
+      if (gyroSubscription) gyroSubscription.remove();
+      if (magnetometerSubscription) magnetometerSubscription.remove();
     };
-  }, [entryTime,hasChecked]);
+  }, [entryTime, hasChecked,heading, currentPosition]);
+
+  const applyLowPassFilter = (data, prevData) => {
+    const alpha = 0.1; // Smoothing factor
+    return prevData + alpha * (data - prevData);
+  };
+
+  const calculateStepCount = (accelerometerData) => {
+    const threshold = 1.2; // Adjust this threshold based on testing
+    if (accelerometerData.z > threshold) {
+      setStepCount((prevCount) => prevCount + 1);
+      updatePosition();
+      console.log('Step detected! Total steps:', stepCount + 1);
+    }
+  };
+
+  const updateHeading = (gyroscopeData) => {
+    const { x, y, z } = gyroscopeData;
+    const deltaHeading = Math.sqrt(x * x + y * y + z * z); // Change in heading based on angular velocity
+    setHeading((prevHeading) => prevHeading + deltaHeading);
+  };
+
+  const calculateHeading = (magnetometerData) => {
+    const { x, y } = magnetometerData;
+    let angle = Math.atan2(y, x) * (180 / Math.PI); // Convert radians to degrees
+    if (angle < 0) {
+      angle += 360;
+    }
+    setHeading((prevHeading) => 0.98 * prevHeading + 0.02 * angle); // Complementary filter
+  };
+
+  const updatePosition = () => {
+    const stepLength = 0.7;
+    const headingInRadians = heading * (Math.PI / 180);
+
+    const deltaLatitude = (stepLength * Math.cos(headingInRadians)) / 111320;
+    const deltaLongitude = (stepLength * Math.sin(headingInRadians)) / (111320 * Math.cos(currentPosition.latitude * (Math.PI / 180)));
+
+    const newLatitude = currentPosition.latitude + deltaLatitude;
+    const newLongitude = currentPosition.longitude + deltaLongitude;
+
+    const filteredLatitude = applyLowPassFilter(newLatitude, currentPosition.latitude);
+    const filteredLongitude = applyLowPassFilter(newLongitude, currentPosition.longitude);
+   
+    setCurrentPosition({ latitude: filteredLatitude, longitude: filteredLongitude });
+
+    
+    console.log('Updated Position:', newLatitude, newLongitude);
+    const distanceToStart = geolib.getDistance(
+      { latitude: filteredLatitude, longitude: filteredLongitude },
+      center
+    );
+
+    if (distanceToStart < 1) { 
+      setCurrentPosition(center);
+      setStepCount(0);
+      console.log('Returned to the starting position.');
+    }
+  };
 
   const setTestLocation = () => {
     const testLocation = { latitude: 10.926058752319875, longitude: 76.92540367417263 };
@@ -252,23 +521,30 @@ const Map = () => {
     console.log('Is the test location inside the polygon?', isInPolygon);
 
     if (isInPolygon && !entryTime) {
-      const testEntryTime = new Date(); 
-      setEntryTime(testEntryTime.toISOString()); 
+      const testEntryTime = new Date();
+      setEntryTime(testEntryTime.toISOString());
       console.log('Entry time recorded for manual location:', new Date(testEntryTime).toLocaleString());
     }
   };
 
+
   return (
     <View style={styles.container}>
       <MapView
-        provider={PROVIDER_GOOGLE}
+        provider={PROVIDER_GOOGLE} // Use Google Maps
         style={styles.map}
-        mapType="hybrid"
-        initialRegion={{
-          latitude: center.latitude,
-          longitude: center.longitude,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
+        mapType="satellite" // Set map type to satellite for 3D terrain
+        initialRegion={region}
+       
+        showsBuildings={true} // Show 3D buildings
+        showsTraffic={true}   // Optional: Show traffic
+        onRegionChangeComplete={(region) => setRegion(region)}
+        camera={{
+          center: { latitude: 10.928549250240643, longitude: 76.92494883585357 }, // Your coordinates
+          pitch: 45,  // Tilt angle (0-90), 45 is a good default for 3D effect
+          heading: 0, // Heading in degrees (0-360), 0 is North
+          altitude: 500, // Altitude of the camera
+          zoom: 18, // Zoom level, closer for 3D effect
         }}
       >
         <Polygon
@@ -290,11 +566,17 @@ const Map = () => {
             pinColor="blue"
           />
         )}
+        {currentPosition && (
+          <Marker
+            coordinate={currentPosition}
+            title={"Tracked Position"}
+            pinColor="green"
+          />
+        )}
       </MapView>
       <Button title="Set Test Location" onPress={setTestLocation} />
-      {/* {entryTime && (
-        <Text>Entry Time: {new Date(entryTime).toLocaleString()}</Text>
-      )} */}
+      <Text>Step Count: {stepCount}</Text>
+      <Text>Heading: {heading.toFixed(2)}°</Text>
     </View>
   );
 };
@@ -308,6 +590,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
 
 export default Map;
