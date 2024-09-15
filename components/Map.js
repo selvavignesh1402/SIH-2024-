@@ -1,123 +1,9 @@
-// import React, { useEffect, useState } from 'react';
-// import { View, StyleSheet, Button } from 'react-native';
-// import MapView, { PROVIDER_GOOGLE, Marker, Polygon } from 'react-native-maps';
-// import * as Location from 'expo-location';
-// import * as geolib from 'geolib';
-
-// const Map = () => {
-//   const [currentLocation, setCurrentLocation] = useState(null);
-//   const [manualLocation, setManualLocation] = useState(null); // State for manual location
-
-//   const center = { latitude: 11.048585818309306, longitude: 76.98050339975696 };
-
-//   const polygonCoords = [
-//     { latitude: center.latitude + 0.0018, longitude: center.longitude + 0.002 }, // Top right
-//     { latitude: center.latitude + 0.0018, longitude: center.longitude - 0.002 }, // Top left
-//     { latitude: center.latitude - 0.0018, longitude: center.longitude - 0.002 }, // Bottom left
-//     { latitude: center.latitude - 0.0018, longitude: center.longitude + 0.002 }, // Bottom right
-//   ];
-
-//   useEffect(() => {
-//     const requestLocationPermission = async () => {
-//       const { status } = await Location.requestForegroundPermissionsAsync();
-
-//       if (status === 'granted') {
-//         getCurrentLocation();
-//       } else {
-//         console.log('Location permission denied');
-//       }
-//     };
-
-//     const getCurrentLocation = async () => {
-//       const location = await Location.getCurrentPositionAsync({});
-
-//       if (location) {
-//         const { coords: { latitude, longitude } } = location;
-//         setCurrentLocation({ latitude, longitude });
-
-//         // Check if the current location is within the polygon
-//         const isInPolygon = geolib.isPointInPolygon(
-//           { latitude, longitude },
-//           polygonCoords
-//         );
-//         console.log('Is the user inside the polygon?', isInPolygon);
-//       } else {
-//         console.log('Unable to retrieve location');
-//       }
-//     };
-
-//     requestLocationPermission();
-//   }, []);
-
-//   // Function to set a manual location for testing
-//   const setTestLocation = () => {
-//     const testLocation = { latitude: 11.089, longitude: 76.981 }; 
-//     setManualLocation(testLocation);
-
-
-//     const isInPolygon = geolib.isPointInPolygon(
-//       testLocation,
-//       polygonCoords
-//     );
-//     console.log('Is the test location inside the polygon?', isInPolygon);
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <MapView
-//         provider={PROVIDER_GOOGLE}
-//         style={styles.map}
-//         initialRegion={{
-//           latitude: center.latitude,
-//           longitude: center.longitude,
-//           latitudeDelta: 0.015,
-//           longitudeDelta: 0.0121,
-//         }}
-//       >
-//         <Polygon
-//           coordinates={polygonCoords}
-//           strokeColor="#F00"
-//           fillColor="rgba(255,0,0,0.3)"
-//           strokeWidth={1}
-//         />
-//         {currentLocation && (
-//           <Marker
-//             coordinate={currentLocation}
-//             title={"Your Location"}
-//           />
-//         )}
-//         {manualLocation && (
-//           <Marker
-//             coordinate={manualLocation}
-//             title={"Manual Location"}
-//             pinColor="blue" // Different color to distinguish
-//           />
-//         )}
-//       </MapView>
-//       <Button title="Set Test Location" onPress={setTestLocation} />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'flex-end', // Ensure the button is at the bottom
-//   },
-//   map: {
-//     flex: 1,
-//   },
-// });
-
-// export default Map;
-
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Button, Text } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as geolib from 'geolib';
 import { Accelerometer, Gyroscope, Magnetometer } from 'expo-sensors';
-import ManualCheck from './ManualCheck';
 
 const polygonCoords = [
   { latitude: 10.926485799543615, longitude: 76.92540093858133 },
@@ -185,176 +71,74 @@ const polygonCoords = [
   { latitude: 10.926478219352054, longitude: 76.92547932246059 },
   { latitude: 10.92648389992211, longitude: 76.92544032015475 },
   { latitude: 10.926485799543615, longitude: 76.92540093858133 },
+
+    // { "latitude": 10.928683341133276, "longitude": 76.92491082824739 },
+    // { "latitude": 10.928682155467547, "longitude": 76.9248862476923 },
+    // { "latitude": 10.928678609888994, "longitude": 76.924861903862 },
+    // { "latitude": 10.928672738543565, "longitude": 76.92483803120139 },
+    // { "latitude": 10.92866459797566, "longitude": 76.9248148596178 },
+    // { "latitude": 10.92865426658358, "longitude": 76.9247926122667 },
+    // { "latitude": 10.928641843864503, "longitude": 76.92477150340261 },
+    // { "latitude": 10.928627449456258, "longitude": 76.9247517363157 },
+    // { "latitude": 10.928611221985141, "longitude": 76.92473350137399 },
+    // { "latitude": 10.928593317730856, "longitude": 76.92471697419002 },
+    // { "latitude": 10.928573909121447, "longitude": 76.92470231392954 },
+    // { "latitude": 10.92855318307271, "longitude": 76.9246896617787 },
+    // { "latitude": 10.928531339188078, "longitude": 76.92467913958431 },
+    // { "latitude": 10.928508587836319, "longitude": 76.92467084868053 },
+    // { "latitude": 10.92848514812558, "longitude": 76.92466486891286 },
+    // { "latitude": 10.928461245793216, "longitude": 76.92466125786915 },
+    // { "latitude": 10.928437111031842, "longitude": 76.92466005032522 },
+    // { "latitude": 10.928412976272432, "longitude": 76.92466125790975 },
+    // { "latitude": 10.928389073945883, "longitude": 76.9246648689925 },
+    // { "latitude": 10.928365634244582, "longitude": 76.92467084879615 },
+    // { "latitude": 10.928342882905532, "longitude": 76.92467913973147 },
+    // { "latitude": 10.92832103903638, "longitude": 76.92468966195172 },
+    // { "latitude": 10.928300313005304, "longitude": 76.92470231412179 },
+    // { "latitude": 10.92828090441506, "longitude": 76.92471697439412 },
+    // { "latitude": 10.928263000180705, "longitude": 76.9247335015821 },
+    // { "latitude": 10.928246772729517, "longitude": 76.9247517365198 },
+    // { "latitude": 10.928232378340436, "longitude": 76.92477150359485 },
+    // { "latitude": 10.92821995563902, "longitude": 76.92479261243973 },
+    // { "latitude": 10.928209624262422, "longitude": 76.92481485976495 },
+    // { "latitude": 10.928201483707223, "longitude": 76.924838031317 },
+    // { "latitude": 10.928195612371232, "longitude": 76.9248619039416 },
+    // { "latitude": 10.928192066798497, "longitude": 76.9248862477329 },
+    // { "latitude": 10.928190881134729, "longitude": 76.92491082824739 },
+    // { "latitude": 10.928192066798497, "longitude": 76.92493540876188 },
+    // { "latitude": 10.928195612371232, "longitude": 76.92495975255318 },
+    // { "latitude": 10.928201483707223, "longitude": 76.92498362517779 },
+    // { "latitude": 10.928209624262422, "longitude": 76.92500679672983 },
+    // { "latitude": 10.92821995563902, "longitude": 76.92502904405505 },
+    // { "latitude": 10.928232378340436, "longitude": 76.92505015289993 },
+    // { "latitude": 10.928246772729517, "longitude": 76.92506991997499 },
+    // { "latitude": 10.928263000180705, "longitude": 76.92508815491269 },
+    // { "latitude": 10.92828090441506, "longitude": 76.92510468210067 },
+    // { "latitude": 10.928300313005304, "longitude": 76.925119342373 },
+    // { "latitude": 10.92832103903638, "longitude": 76.92513199454308 },
+    // { "latitude": 10.928342882905532, "longitude": 76.92514251676332 },
+    // { "latitude": 10.928365634244582, "longitude": 76.92515080769863 },
+    // { "latitude": 10.928389073945883, "longitude": 76.92515678750229 },
+    // { "latitude": 10.928412976272432, "longitude": 76.92516039858504 },
+    // { "latitude": 10.928437111031842, "longitude": 76.92516160616957 },
+    // { "latitude": 10.928461245793216, "longitude": 76.92516039862564 },
+    // { "latitude": 10.92848514812558, "longitude": 76.92515678758193 },
+    // { "latitude": 10.928508587836319, "longitude": 76.92515080781425 },
+    // { "latitude": 10.928531339188078, "longitude": 76.92514251691047 },
+    // { "latitude": 10.92855318307271, "longitude": 76.9251319947161 },
+    // { "latitude": 10.928573909121447, "longitude": 76.92511934256524 },
+    // { "latitude": 10.928593317730856, "longitude": 76.92510468230476 },
+    // { "latitude": 10.928611221985141, "longitude": 76.92508815512079 },
+    // { "latitude": 10.928627449456258, "longitude": 76.92506992017908 },
+    // { "latitude": 10.928641843864503, "longitude": 76.92505015309217 },
+    // { "latitude": 10.92865426658358, "longitude": 76.92502904422808 },
+    // { "latitude": 10.92866459797566, "longitude": 76.92500679687699 },
+    // { "latitude": 10.928672738543565, "longitude": 76.9249836252934 },
+    // { "latitude": 10.928678609888994, "longitude": 76.9249597526328 },
+    // { "latitude": 10.928682155467547, "longitude": 76.92493540880248 },
+    // { "latitude": 10.928683341133276, "longitude": 76.92491082824739 }  
 ];
 
-// const Map = () => {
-//   const [currentLocation, setCurrentLocation] = useState(null);
-//   const [manualLocation, setManualLocation] = useState(null);
-//   const [entryTime, setEntryTime] = useState(null);
-//   const [hasChecked, setHasChecked] = useState(false);
-//   const [accelerometerData, setAccelerometerData] = useState({});
-//   const [gyroscopeData, setGyroscopeData] = useState({});
-//   const [magnetometerData, setMagnetometerData] = useState(null);
-//   const [stepCount, setStepCount] = useState(0);
-//   const [heading, setHeading] = useState(0);
-
-//   const center = { latitude: 11.04860471121232, longitude: 76.98053638312406 };
-
-//   useEffect(() => {
-//     let locationSubscription;
-//     let accelSubscription;
-//     let gyroSubscription;
-//     let magnetometerSubscription;
-
-//     const requestLocationPermission = async () => {
-//       const { status } = await Location.requestForegroundPermissionsAsync();
-
-//       if (status === 'granted') {
-//         locationSubscription = await Location.watchPositionAsync(
-//           {
-//             accuracy: Location.Accuracy.High,
-//             timeInterval: 1000,
-//             distanceInterval: 1,
-//           },
-//           (location) => {
-//             if (location && !hasChecked) {
-//               const { coords: { latitude, longitude } } = location;
-//               setCurrentLocation({ latitude, longitude });
-
-//               const isInPolygon = geolib.isPointInPolygon(
-//                 { latitude, longitude },
-//                 polygonCoords
-//               );
-//               console.log('Is the user inside the polygon?', isInPolygon);
-
-//               if (isInPolygon && !entryTime) {
-//                 const currentTime = new Date().toISOString();
-//                 setEntryTime(currentTime);
-//                 console.log('Entry time recorded:', currentTime);
-//               }
-//               setHasChecked(true);
-//             }
-//           }
-//         );
-//       } else {
-//         console.log('Location permission denied');
-//       }
-//     };
-
-//     const startSensors = () => {
-//       accelSubscription = Accelerometer.addListener((data) => {
-//         setAccelerometerData(data);
-//         calculateStepCount(data);
-//       });
-
-//       gyroSubscription = Gyroscope.addListener((data) => {
-//         setGyroscopeData(data);
-//         updateHeading(data);
-//       });
-
-//       magnetometerSubscription = Magnetometer.addListener((data) => {
-//         setMagnetometerData(data);
-//         // console.log('Magnetometer Data:', data);
-//       });
-
-//       Accelerometer.setUpdateInterval(100); // 100ms
-//       Gyroscope.setUpdateInterval(100); // 100ms
-//       Magnetometer.setUpdateInterval(100); // 100ms
-//     };
-
-//     requestLocationPermission();
-//     startSensors();
-
-//     return () => {
-//       if (locationSubscription) locationSubscription.remove();
-//       if (accelSubscription) accelSubscription.remove();
-//       if (gyroSubscription) gyroSubscription.remove();
-//       if (magnetometerSubscription) magnetometerSubscription.remove();
-//     };
-//   }, [entryTime, hasChecked]);
-
-//   const calculateStepCount = (accelerometerData) => {
-//     const threshold = 1.2; // Adjust this threshold based on testing
-//     if (accelerometerData.z > threshold) {
-//       setStepCount((prevCount) => prevCount + 1);
-//       console.log('Step detected! Total steps:', stepCount + 1);
-//     }
-//   };
-
-//   const updateHeading = (gyroscopeData) => {
-//     const { x, y, z } = gyroscopeData;
-//     const deltaHeading = Math.sqrt(x * x + y * y + z * z); // Change in heading based on angular velocity
-//     setHeading((prevHeading) => prevHeading + deltaHeading);
-//   };
-
-//   const setTestLocation = () => {
-//     const testLocation = { latitude: 10.926058752319875, longitude: 76.92540367417263 };
-//     setManualLocation(testLocation);
-
-//     const isInPolygon = geolib.isPointInPolygon(
-//       testLocation,
-//       polygonCoords
-//     );
-//     console.log('Is the test location inside the polygon?', isInPolygon);
-
-//     if (isInPolygon && !entryTime) {
-//       const testEntryTime = new Date();
-//       setEntryTime(testEntryTime.toISOString());
-//       console.log('Entry time recorded for manual location:', new Date(testEntryTime).toLocaleString());
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <MapView
-//         provider={PROVIDER_GOOGLE}
-//         style={styles.map}
-//         mapType="hybrid"
-//         initialRegion={{
-//           latitude: center.latitude,
-//           longitude: center.longitude,
-//           latitudeDelta: 0.015,
-//           longitudeDelta: 0.0121,
-//         }}
-//       >
-//         <Polygon
-//           coordinates={polygonCoords}
-//           strokeColor="#F00"
-//           fillColor="rgba(255,0,0,0.3)"
-//           strokeWidth={1}
-//         />
-//         {currentLocation && (
-//           <Marker
-//             coordinate={currentLocation}
-//             title={"Your Location"}
-//           />
-//         )}
-//         {manualLocation && (
-//           <Marker
-//             coordinate={manualLocation}
-//             title={"Manual Location"}
-//             pinColor="blue"
-//           />
-//         )}
-//       </MapView>
-//       <Button title="Set Test Location" onPress={setTestLocation} />
-//       <Text>Step Count: {stepCount}</Text>
-//       <Text>Heading: {heading}</Text>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'flex-end',
-//   },
-//   map: {
-//     flex: 1,
-//   },
-// });
-
-// export default Map;
 
 const Map = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -369,7 +153,7 @@ const Map = () => {
   const [currentPosition, setCurrentPosition] = useState({ latitude: 0, longitude: 0 });
 
   const center = { latitude: 10.928549250240643, longitude: 76.92494883585357 };
-  // 10.928549250240643, 76.92494883585357
+  
   const [region, setRegion] = useState({
     latitude: 10.928549250240643,
     longitude: 76.92494883585357,
@@ -389,9 +173,9 @@ const Map = () => {
       if (status === 'granted') {
         locationSubscription = await Location.watchPositionAsync(
           {
-            accuracy: Location.Accuracy.High,
-            timeInterval: 1000,
-            distanceInterval: 1,
+            accuracy: Location.Accuracy.BestForNavigation,
+            timeInterval: 10000,
+            distanceInterval: 10,
           },
           (location) => {
             if (location && !hasChecked) {
@@ -403,12 +187,12 @@ const Map = () => {
                 { latitude, longitude },
                 polygonCoords
               );
-              //console.log('Is the user inside the polygon?', isInPolygon);
+              console.log('Is the user inside the polygon?', isInPolygon);
 
               if (isInPolygon && !entryTime) {
                 const currentTime = new Date().toISOString();
                 setEntryTime(currentTime);
-                console.log('Entry time recorded:', currentTime);
+                // console.log('Entry time recorded:', currentTime);
               }
               setHasChecked(true);
             }
@@ -420,9 +204,9 @@ const Map = () => {
     };
 
     const startSensors = () => {
-      Accelerometer.setUpdateInterval(100);
-      Gyroscope.setUpdateInterval(100);
-      Magnetometer.setUpdateInterval(100);
+      Accelerometer.setUpdateInterval(1000);
+      Gyroscope.setUpdateInterval(1000);
+      Magnetometer.setUpdateInterval(1000);
 
       accelSubscription = Accelerometer.addListener((data) => {
         setAccelerometerData(data);
@@ -450,15 +234,15 @@ const Map = () => {
       if (gyroSubscription) gyroSubscription.remove();
       if (magnetometerSubscription) magnetometerSubscription.remove();
     };
-  }, [entryTime, hasChecked,heading, currentPosition]);
+  }, [entryTime,heading, currentPosition]);
 
   const applyLowPassFilter = (data, prevData) => {
-    const alpha = 0.1; // Smoothing factor
+    const alpha = 0.1; 
     return prevData + alpha * (data - prevData);
   };
 
   const calculateStepCount = (accelerometerData) => {
-    const threshold = 1.2; // Adjust this threshold based on testing
+    const threshold = 1.2; 
     if (accelerometerData.z > threshold) {
       setStepCount((prevCount) => prevCount + 1);
       updatePosition();
@@ -468,17 +252,17 @@ const Map = () => {
 
   const updateHeading = (gyroscopeData) => {
     const { x, y, z } = gyroscopeData;
-    const deltaHeading = Math.sqrt(x * x + y * y + z * z); // Change in heading based on angular velocity
+    const deltaHeading = Math.sqrt(x * x + y * y + z * z); 
     setHeading((prevHeading) => prevHeading + deltaHeading);
   };
 
   const calculateHeading = (magnetometerData) => {
     const { x, y } = magnetometerData;
-    let angle = Math.atan2(y, x) * (180 / Math.PI); // Convert radians to degrees
+    let angle = Math.atan2(y, x) * (180 / Math.PI); 
     if (angle < 0) {
       angle += 360;
     }
-    setHeading((prevHeading) => 0.98 * prevHeading + 0.02 * angle); // Complementary filter
+    setHeading((prevHeading) => 0.98 * prevHeading + 0.02 * angle);
   };
 
   const updatePosition = () => {
@@ -511,7 +295,7 @@ const Map = () => {
   };
 
   const setTestLocation = () => {
-    const testLocation = { latitude: 10.926058752319875, longitude: 76.92540367417263 };
+    const testLocation = { latitude: 10.926264683573066, longitude:  76.92487742683454 };
     setManualLocation(testLocation);
 
     const isInPolygon = geolib.isPointInPolygon(
@@ -531,20 +315,21 @@ const Map = () => {
   return (
     <View style={styles.container}>
       <MapView
-        provider={PROVIDER_GOOGLE} // Use Google Maps
+        provider={PROVIDER_GOOGLE} 
         style={styles.map}
-        mapType="satellite" // Set map type to satellite for 3D terrain
+        mapType="satellite" 
         initialRegion={region}
-       
-        showsBuildings={true} // Show 3D buildings
-        showsTraffic={true}   // Optional: Show traffic
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        showsBuildings={true}
+        showsTraffic={true}  
         onRegionChangeComplete={(region) => setRegion(region)}
         camera={{
-          center: { latitude: 10.928549250240643, longitude: 76.92494883585357 }, // Your coordinates
-          pitch: 45,  // Tilt angle (0-90), 45 is a good default for 3D effect
-          heading: 0, // Heading in degrees (0-360), 0 is North
-          altitude: 500, // Altitude of the camera
-          zoom: 18, // Zoom level, closer for 3D effect
+          center: { latitude: 10.928549250240643, longitude: 76.92494883585357 },
+          pitch: 95, 
+          heading: 0, 
+          altitude: 500, 
+          zoom: 18,
         }}
       >
         <Polygon

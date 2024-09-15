@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true
     },
-   "android": {
+    "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -27,7 +27,8 @@
       },
       "permissions": [
         "ACCESS_FINE_LOCATION"
-      ]
+      ],
+      "package": "com.anonymous.frontend"
     },
     "web": {
       "bundler": "metro",
