@@ -27,6 +27,24 @@ const HomeScreen: React.FC = () => {
         >
           <Text style={styles.buttonText}>Indoor</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push('/login')}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push('/check')}
+        >
+          <Text style={styles.buttonText}>Check</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => router.push('/leave')}
+        >
+          <Text style={styles.buttonText}>Leave</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
