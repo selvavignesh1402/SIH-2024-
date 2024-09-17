@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import FloorPlan from '../components/FloorPlan';
+import ManualCheck from '../../components/ManualCheck';
 
 export default function MapScreen() {
   return (
     <View style={styles.container}>
-      <FloorPlan />
+      <ManualCheck />
     </View>
   );
 }

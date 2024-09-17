@@ -1,16 +1,34 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 
 const Check = () => {
+  const navigation = useNavigation();
+
+  const handleOpenDrawer = () => {
+    if (navigation.dispatch) {
+      navigation.dispatch(DrawerActions.openDrawer()); // Use DrawerActions for opening the drawer
+    } else {
+      console.warn('DrawerActions is not available in this navigation context');
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Good Morning</Text>
-        <Text style={styles.userName}>Rajesh Mehta</Text>
-        <FontAwesome name="bell" size={24} color="white" style={styles.bellIcon} />
-        <FontAwesome name="bars" size={24} color="white" style={styles.menuIcon} />
+        <View>
+          <Text style={styles.headerText}>Good Morning</Text>
+          <Text style={styles.userName}>Rajesh Mehta</Text>
+        </View>
+        {/* Icons Container */}
+        <View style={styles.iconsContainer}>
+          <FontAwesome name="bell" size={24} color="white" style={styles.bellIcon} />
+          <TouchableOpacity onPress={handleOpenDrawer} style={styles.menuButton}>
+            <FontAwesome name="bars" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Date Selection */}
@@ -54,16 +72,6 @@ const Check = () => {
           <Text style={styles.workingHoursTime}>06:32:04</Text>
         </View>
       </View>
-
-      {/* Bottom Icons */}
-      <View style={styles.bottomMenu}>
-        {['Task', 'Leave', 'Attendance'].map((item, index) => (
-          <TouchableOpacity key={index} style={styles.menuItem}>
-            <FontAwesome name={item.toLowerCase() === 'task' ? 'clipboard' : item.toLowerCase() === 'leave' ? 'calendar' : 'users'} size={24} color="#3498db" />
-            <Text style={styles.menuText}>{item}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
     </ScrollView>
   );
 };
@@ -79,7 +87,9 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    position: 'relative',
+    flexDirection: 'row', // Align items horizontally
+    justifyContent: 'space-between', // Space between the text and icons
+    alignItems: 'center', // Vertically center items
   },
   headerText: {
     fontSize: 18,
@@ -91,15 +101,14 @@ const styles = StyleSheet.create({
     color: 'white',
     marginVertical: 5,
   },
-  bellIcon: {
-    position: 'absolute',
-    right: 60,
-    top: 60,
+  iconsContainer: {
+    flexDirection: 'row', 
+    marginBottom:18,
+    alignItems: 'center', 
+    gap:10
   },
-  menuIcon: {
-    position: 'absolute',
-    right: 20,
-    top: 60,
+  bellIcon: {
+    marginRight: 20, 
   },
   dateContainer: {
     flexDirection: 'row',
@@ -170,21 +179,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     marginTop: 5,
-  },
-  bottomMenu: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 20,
-    backgroundColor: '#f9f9f9',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-  },
-  menuItem: {
-    alignItems: 'center',
-  },
-  menuText: {
-    marginTop: 5,
-    color: '#3498db',
   },
 });
 

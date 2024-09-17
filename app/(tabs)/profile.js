@@ -1,9 +1,9 @@
 import React from 'react';
-import Check from '../components/Check';
+import Profile from '../../components/Profile';
 
 export default function MapScreen() {
   return (
-      <Check/>
+      <Profile/>
   );
 }
 

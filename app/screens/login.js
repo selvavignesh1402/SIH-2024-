@@ -1,9 +1,9 @@
 import React from 'react';
-import Leave from '../components/Leave';
+import LoginScreen from '../../components/Login';
 
 export default function MapScreen() {
   return (
-      <Leave/>
+      <LoginScreen/>
   );
 }
 
