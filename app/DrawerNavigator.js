@@ -20,6 +20,9 @@ const CustomDrawerContent = (props) => {
         onPress={() => navigation.navigate('HomeTabs', { screen: 'index' })}
       />
 
+
+
+
       <DrawerItem
         label={() => (
           <View style={styles.drawerItem}>

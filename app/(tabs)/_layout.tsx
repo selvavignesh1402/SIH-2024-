@@ -4,6 +4,7 @@ import TabBar from '../../components/TabBar';
 import Leave from '../../components/Leave';
 import Manual from '../../components/ManualCheck';
 import Map from '../../components/Map';
+import Notification from "../../components/Notification";
 import CustomDrawerContent from '../DrawerNavigator'; 
 import { Tabs } from 'expo-router';
 
@@ -51,6 +52,7 @@ export default function Layout() {
       <Drawer.Screen name="Leave" component={Leave} options={{ headerShown: false }} />
       <Drawer.Screen name="Map" component={Map} options={{ headerShown: false }} />
       <Drawer.Screen name="Manual" component={Manual} options={{ headerShown: false }} />
+      <Drawer.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
     </Drawer.Navigator>
   );
 }

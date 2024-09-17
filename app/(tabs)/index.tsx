@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
-import { FontAwesome } from '@expo/vector-icons'; // Icons for the header
+import { FontAwesome } from '@expo/vector-icons'; 
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 
 const screenWidth = Dimensions.get('window').width;
@@ -11,10 +11,14 @@ const index = () => {
 
   const handleOpenDrawer = () => {
     if (navigation.dispatch) {
-      navigation.dispatch(DrawerActions.openDrawer()); // Use DrawerActions for opening the drawer
+      navigation.dispatch(DrawerActions.openDrawer()); 
     } else {
       console.warn('DrawerActions is not available in this navigation context');
     }
+  };
+
+  const handleNavigateToNotifications = () => {
+    navigation.navigate('Notification'); 
   };
 
   const data = {
@@ -36,7 +40,9 @@ const index = () => {
           <Text style={styles.userName}>Rajesh Mehta</Text>
         </View>
         <View style={styles.iconsContainer}>
-          <FontAwesome name="bell" size={24} color="white" style={styles.bellIcon} />
+        <TouchableOpacity onPress={handleNavigateToNotifications}>
+            <FontAwesome name="bell" size={24} color="white" style={styles.bellIcon} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={handleOpenDrawer}>
             <FontAwesome name="bars" size={24} color="white" />
           </TouchableOpacity>
