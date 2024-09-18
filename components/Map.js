@@ -815,6 +815,8 @@ import MapView, { PROVIDER_GOOGLE, Marker, Polygon } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as geolib from 'geolib';
 import { Accelerometer, Gyroscope, Magnetometer } from 'expo-sensors';
+import { startBackgroundLocationTask } from './TaskManager';  // Import background task
+import { requestNotificationPermission,sendCheckOutNotification, sendCheckInNotification  } from './NotificationManager';  // Import notifications
 
 const polygonCoords = [
   { latitude: 10.926485799543615, longitude: 76.92540093858133 },
@@ -948,12 +950,79 @@ const polygonCoords = [
   // { latitude: 11.04905714021338, longitude: 76.980563586358 },
   // { latitude: 11.04906361573629, longitude: 76.98051910751127 },
   // { latitude: 11.049065781195477, longitude: 76.98047419614151 },
+
+  { "latitude": 10.928668731921016, "longitude": 76.92490963817254 },
+  { "latitude": 10.928667506559936, "longitude": 76.92488423467773 },
+  { "latitude": 10.928663842277626, "longitude": 76.9248590758331 },
+  { "latitude": 10.928657774363213, "longitude": 76.92483440393265 },
+  { "latitude": 10.928649361254177, "longitude": 76.92481045658084 },
+  { "latitude": 10.928638683973553, "longitude": 76.92478746440425 },
+  { "latitude": 10.928625845349629, "longitude": 76.92476564883047 },
+  { "latitude": 10.928610969025637, "longitude": 76.92474521995575 },
+  { "latitude": 10.928594198269016, "longitude": 76.92472637452147 },
+  { "latitude": 10.928575694591617, "longitude": 76.92470929401952 },
+  { "latitude": 10.928555636194277, "longitude": 76.92469414294443 },
+  { "latitude": 10.928534216250624, "longitude": 76.92468106720915 },
+  { "latitude": 10.928511641046695, "longitude": 76.92467019273985 },
+  { "latitude": 10.928488127994283, "longitude": 76.92466162426324 },
+  { "latitude": 10.928463903537134, "longitude": 76.92465544429791 },
+  { "latitude": 10.928439200970155, "longitude": 76.92465171235979 },
+  { "latitude": 10.928414258192658, "longitude": 76.92465046438886 },
+  { "latitude": 10.928389315417258, "longitude": 76.92465171240315 },
+  { "latitude": 10.92836461285649, "longitude": 76.92465544438296 },
+  { "latitude": 10.92834038840942, "longitude": 76.9246616243867 },
+  { "latitude": 10.928316875370578, "longitude": 76.92467019289703 },
+  { "latitude": 10.928294300183186, "longitude": 76.92468106739396 },
+  { "latitude": 10.928272880258397, "longitude": 76.92469414314978 },
+  { "latitude": 10.928252821881527, "longitude": 76.9247092942375 },
+  { "latitude": 10.928234318225417, "longitude": 76.92472637474373 },
+  { "latitude": 10.928217547490078, "longitude": 76.92474522017375 },
+  { "latitude": 10.92820267118656, "longitude": 76.92476564903582 },
+  { "latitude": 10.928189832581499, "longitude": 76.92478746458903 },
+  { "latitude": 10.928179155317409, "longitude": 76.92481045673802 },
+  { "latitude": 10.928170742221944, "longitude": 76.92483440405614 },
+  { "latitude": 10.928164674317614, "longitude": 76.92485907591815 },
+  { "latitude": 10.928161010041512, "longitude": 76.92488423472109 },
+  { "latitude": 10.928159784682528, "longitude": 76.92490963817254 },
+  { "latitude": 10.928161010041512, "longitude": 76.924935041624 },
+  { "latitude": 10.928164674317614, "longitude": 76.92496020042694 },
+  { "latitude": 10.928170742221944, "longitude": 76.92498487228895 },
+  { "latitude": 10.928179155317409, "longitude": 76.92500881960707 },
+  { "latitude": 10.928189832581499, "longitude": 76.92503181175604 },
+  { "latitude": 10.92820267118656, "longitude": 76.92505362730927 },
+  { "latitude": 10.928217547490078, "longitude": 76.92507405617134 },
+  { "latitude": 10.928234318225417, "longitude": 76.92509290160136 },
+  { "latitude": 10.928252821881527, "longitude": 76.92510998210757 },
+  { "latitude": 10.928272880258397, "longitude": 76.92512513319531 },
+  { "latitude": 10.928294300183186, "longitude": 76.92513820895113 },
+  { "latitude": 10.928316875370578, "longitude": 76.92514908344806 },
+  { "latitude": 10.92834038840942, "longitude": 76.92515765195837 },
+  { "latitude": 10.92836461285649, "longitude": 76.92516383196212 },
+  { "latitude": 10.928389315417258, "longitude": 76.92516756394194 },
+  { "latitude": 10.928414258192658, "longitude": 76.92516881195623 },
+  { "latitude": 10.928439200970155, "longitude": 76.92516756398528 },
+  { "latitude": 10.928463903537134, "longitude": 76.92516383204718 },
+  { "latitude": 10.928488127994283, "longitude": 76.92515765208185 },
+  { "latitude": 10.928511641046695, "longitude": 76.92514908360523 },
+  { "latitude": 10.928534216250624, "longitude": 76.92513820913592 },
+  { "latitude": 10.928555636194277, "longitude": 76.92512513340066 },
+  { "latitude": 10.928575694591617, "longitude": 76.92510998232555 },
+  { "latitude": 10.928594198269016, "longitude": 76.92509290182362 },
+  { "latitude": 10.928610969025637, "longitude": 76.92507405638933 },
+  { "latitude": 10.928625845349629, "longitude": 76.9250536275146 },
+  { "latitude": 10.928638683973553, "longitude": 76.92503181194083 },
+  { "latitude": 10.928649361254177, "longitude": 76.92500881976424 },
+  { "latitude": 10.928657774363213, "longitude": 76.92498487241244 },
+  { "latitude": 10.928663842277626, "longitude": 76.92496020051198 },
+  { "latitude": 10.928667506559936, "longitude": 76.92493504166735 },
+  { "latitude": 10.928668731921016, "longitude": 76.92490963817254 }
 ];
 
-const center = { latitude: 11.048736043278879, longitude: 76.9804565417652 };
+const center = { latitude: 11.049065781195477, longitude: 76.98047419614151 };
 
-const allowedCheckInTime = { start: "01:00", end: "01:03" };
-const allowedCheckOutTime = { start: "01:04", end: "02:00" };
+const allowedCheckInTime = { start: '08:00', end: '21:00' };
+const allowedCheckOutTime = { start: '08:00', end: '21:00' };
+
 
 const Map = () => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -977,6 +1046,7 @@ const Map = () => {
     let gyroSubscription;
     let magnetometerSubscription;
 
+    // Request location permission and start background tracking
     const requestLocationPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -996,15 +1066,12 @@ const Map = () => {
           setCurrentLocation({ latitude, longitude });
           setCurrentPosition({ latitude, longitude });
 
+          // Check if user is inside the defined polygon
           const isInPolygon = geolib.isPointInPolygon({ latitude, longitude }, polygonCoords);
-          if (isInPolygon) {
-            if (!hasCheckedIn) {
-              handleCheckIn(); // Check-in when entering the polygon
-            }
-          } else {
-            if (hasCheckedIn && !hasCheckedOut) {
-              handleCheckOut(); // Check-out when leaving the polygon
-            }
+          if (isInPolygon && !hasCheckedIn) {
+            handleCheckIn();  // Check-in when entering the polygon
+          } else if (!isInPolygon && hasCheckedIn && !hasCheckedOut) {
+            handleCheckOut();  // Check-out when leaving the polygon
           }
         }
       );
@@ -1017,62 +1084,80 @@ const Map = () => {
 
       accelSubscription = Accelerometer.addListener((data) => {
         setAccelerometerData(data);
-        calculateStepCount(data);
+        calculateStepCount(data); // You can implement this function to detect steps
       });
 
       gyroSubscription = Gyroscope.addListener((data) => {
         setGyroscopeData(data);
-        updateHeading(data);
+        updateHeading(data); // Implement heading calculation logic
       });
 
       magnetometerSubscription = Magnetometer.addListener((data) => {
         setMagnetometerData(data);
-        calculateHeading(data);
+        calculateHeading(data); // Implement heading calculation based on magnetometer data
       });
     };
 
-    const handleCheckIn = () => {
-      const now = new Date();
-      const currentTime = now.toTimeString().split(' ')[0].slice(0, 5);
-
-      if (currentTime >= allowedCheckInTime.start && currentTime <= allowedCheckInTime.end) {
-        setCheckInTime(now);
-        setHasCheckedIn(true);
-        // Alert.alert('Success', `Checked in at ${currentTime}`);
-      } else {
-        // Alert.alert('Error', `Check-in is only allowed between ${allowedCheckInTime.start} and ${allowedCheckInTime.end}`);
-      }
+    // Request notification permission and start background tracking
+    const initApp = async () => {
+      await requestNotificationPermission(); // Request permission for notifications
+      await startBackgroundLocationTask(); // Start background location tracking
     };
 
-    const handleCheckOut = () => {
-      const now = new Date();
-      const currentTime = now.toTimeString().split(' ')[0].slice(0, 5);
-
-      if (!hasCheckedIn) {
-        Alert.alert('Error', 'You must check in before checking out');
-        return;
-      }
-
-      if (currentTime >= allowedCheckOutTime.start && currentTime <= allowedCheckOutTime.end) {
-        setCheckOutTime(now);
-        setHasCheckedOut(true);
-        // Alert.alert('Success', `Checked out at ${currentTime}`);
-      } else {
-        // Alert.alert('Error', `Check-out is only allowed between ${allowedCheckOutTime.start} and ${allowedCheckOutTime.end}`);
-      }
-    };
-
-    // Call the function to request permissions and start tracking
+    // Call the function to request permissions, start tracking, and sensors
     requestLocationPermission();
     startSensors();
+    initApp();
 
+    // Cleanup subscriptions on unmount
     return () => {
       if (locationSubscription) locationSubscription.remove();
       if (accelSubscription) accelSubscription.remove();
       if (gyroSubscription) gyroSubscription.remove();
       if (magnetometerSubscription) magnetometerSubscription.remove();
     };
-  }, [hasCheckedIn, hasCheckedOut, heading, currentPosition]);
+  }, [hasCheckedIn, hasCheckedOut]);
+
+  const handleCheckIn = async () => {
+    const now = new Date();
+    const currentTime = now.toTimeString().split(' ')[0].slice(0, 5);
+  
+    if (currentTime >= allowedCheckInTime.start && currentTime <= allowedCheckInTime.end) {
+      setCheckInTime(now);
+      setHasCheckedIn(true);
+      setHasCheckedOut(false);
+      await sendCheckInNotification(`Welcome! You've checked in at ${currentTime}.`); // Custom message
+    } else {
+      Alert.alert('Error', `Check-in allowed only between ${allowedCheckInTime.start} and ${allowedCheckInTime.end}`);
+    }
+  };
+
+  const handleCheckOut = async () => {
+    const now = new Date();
+    const currentTime = now.toTimeString().split(' ')[0].slice(0, 5);
+  
+    if (!hasCheckedIn) {
+      Alert.alert('Error', 'You must check in before checking out');
+      return;
+    }
+  
+    // Check if the user has already checked out
+    if (hasCheckedOut) {
+      console.log('Check-out already processed');
+      return;
+    }
+  
+    if (currentTime >= allowedCheckOutTime.start && currentTime <= allowedCheckOutTime.end) {
+      setCheckOutTime(now);
+      setHasCheckedOut(true);
+      setHasCheckedIn(false);
+      await sendCheckOutNotification(`Goodbye! You've checked out at ${currentTime}.`); // Custom message
+    } else {
+      console.log(`Check-out not allowed outside the allowed time range.`);
+    }
+  };
+  
+
 
   const applyLowPassFilter = (data, prevData) => {
     const alpha = 0.1;
