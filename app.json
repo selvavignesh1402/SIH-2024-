@@ -45,7 +45,10 @@
     "extra": {
       "mapboxToken": "pk.eyJ1IjoidmlnbmVzaDEyMzQ1NjciLCJhIjoiY20wY2tnY2x4MDM0YTJsczhoN2h6bHM5ZyJ9.efhAE5dA01UVW0RbILRxdg",
       "foursquareApiKey": "fsq3mYZ6ETlORsrHsrqL/+dxKd4oBndLOV7wySamZS/Gaf8=",
-      "openCageApiKey": "b78dd2fbab6c4fdea284e6c8ccf67eda"
+      "openCageApiKey": "b78dd2fbab6c4fdea284e6c8ccf67eda",
+      "eas": {
+        "projectId": "a5f274ba-3b69-43fb-b478-2697657aeaaa"
+      }
     }
   }
 }
